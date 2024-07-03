@@ -1,0 +1,16 @@
+int pulsePin = A0; // ต่อ Pulse Sensor กับขา A0 ของ Arduino
+int signal;
+int threshold = 550; // กำหนด threshold ค่าชีพจร
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(pulsePin, INPUT);
+}
+
+void loop() {
+  signal = analogRead(pulsePin);
+  if (signal > threshold) {
+    Serial.println("Heart Beat");
+  }
+  delay(10);
+}
