@@ -1,0 +1,18 @@
+import serial
+import socketio
+
+sio = socketio.Client()
+sio.connect('http://your_server_ip:your_port')
+
+ser = serial.Serial('/dev/ttyUSB0', 9600)
+
+while True:
+    data = ser.readline().decode('utf-8').strip()
+    if "Heart Beat" in data:
+        sio.emit('pulse', {'pulse': 1})
+    else:
+        try:
+            steps = int(data)
+            sio.emit('steps', {'steps': steps})
+        except ValueError:
+            pass
