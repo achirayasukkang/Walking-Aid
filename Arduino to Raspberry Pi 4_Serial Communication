@@ -1,18 +1,12 @@
 import serial
-import socketio
 
-sio = socketio.Client()
-sio.connect('http://your_server_ip:your_port')
-
-ser = serial.Serial('/dev/ttyUSB0', 9600)
+ser = serial.Serial('/dev/ttyUSB0', 9600)  # ปรับตามพอร์ตที่ใช้งาน
 
 while True:
-    data = ser.readline().decode('utf-8').strip()
-    if "Heart Beat" in data:
-        sio.emit('pulse', {'pulse': 1})
-    else:
-        try:
-            steps = int(data)
-            sio.emit('steps', {'steps': steps})
-        except ValueError:
-            pass
+    if ser.in_waiting > 0:
+        line = ser.readline().decode('utf-8').rstrip()
+        print(line)
+        # ส่งข้อมูลไปยัง socket.io
+        socketio.emit('data', {'message': line})
+
+//py
